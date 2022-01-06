@@ -1,1 +1,0 @@
-select * from RAW.JAFFLE_SHOP.CUSTOMERS
