@@ -1,12 +1,11 @@
 version: 2
 
 sources:
-  - name: jaffle_shop
+  - name: stripe
     database: raw
-    schema: jaffle_shop
+    schema: stripe
     tables:
-      - name: customers
-      - name: orders
+      - name: payment
         loaded_at_filed: _etl_loaded_at
         freshness: 
           warn_after: {count: 12, period: hour}
