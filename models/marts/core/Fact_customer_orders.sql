@@ -1,43 +1,14 @@
 with 
 
--- Import CTEs 
+-- Import CTEs
 orders as (
-  select * from {{ ref('stg_jaffle_shop__orders') }}
+  select * from {{ ref('int_orders') }}
 ),
+
 
 customers as (
   select * from {{ ref('stg_jaffle_shop__customers') }}
 ),
-  
-payments as (
-  select * from {{ ref('stg_stripe__payments') }}
-   where payments.payment_status != 'fail'
-),
-
-order_total as (
-
-    select
-
-      order_id,
-      payment_status,
-      sum(payment_amount) as order_value_dollars
-
-    from payments
-    group by 1, 2
-),
-
-order_values_joined as (
-
-  select 
-    orders.*,
-    order_total.payment_status,
-    order_total.order_value_dollars
-
-  from orders
-  left join order_total 
-    on orders.order_id = order_total.order_id
-)
-
 
 -- marts
 customer_order_history as (
@@ -84,9 +55,6 @@ customer_order_history as (
 
     join customers
     on orders.customer_id = customers.customer_id
-
-    left outer join payments
-    on orders.order_id = payments.order_id
 
     group by customers.customer_id, customers.full_name, customers.surname, customers.givenname
 
